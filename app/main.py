@@ -3,7 +3,12 @@ from sqlalchemy.orm import Session
 from .db import get_db
 from . import crud, schemas
 
-app = FastAPI(title="Online Shop API")
+app = FastAPI(
+    title="Online Shop API",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"   
+)
 
 @app.get("/health")
 def health():
