@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .db import get_db
 from . import crud, schemas
+import os
 
 app = FastAPI(
     title="Online Shop API",
@@ -13,6 +14,7 @@ app = FastAPI(
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
 
 # Users
 @app.post("/users", response_model=schemas.UserOut)
@@ -81,3 +83,8 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     crud.delete_product(db, product)
     return {"deleted": True}
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)
